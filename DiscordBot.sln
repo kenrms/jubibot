@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot.csproj", "{E884AED0-CE67-4F38-B9EF-7650ACF7BE38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordBot", "DiscordBot.csproj", "{E884AED0-CE67-4F38-B9EF-7650ACF7BE38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JubiAPI", "..\JubiAPI\JubiAPI.csproj", "{37EE9145-31ED-4330-8D90-F91A84C2672E}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "jubiui", "..\JubiUI\jubiui.esproj", "{AAF841A9-7E8A-47EC-B959-514938C9E35B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,16 @@ Global
 		{E884AED0-CE67-4F38-B9EF-7650ACF7BE38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E884AED0-CE67-4F38-B9EF-7650ACF7BE38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E884AED0-CE67-4F38-B9EF-7650ACF7BE38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37EE9145-31ED-4330-8D90-F91A84C2672E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37EE9145-31ED-4330-8D90-F91A84C2672E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37EE9145-31ED-4330-8D90-F91A84C2672E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37EE9145-31ED-4330-8D90-F91A84C2672E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF841A9-7E8A-47EC-B959-514938C9E35B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF841A9-7E8A-47EC-B959-514938C9E35B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF841A9-7E8A-47EC-B959-514938C9E35B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AAF841A9-7E8A-47EC-B959-514938C9E35B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF841A9-7E8A-47EC-B959-514938C9E35B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF841A9-7E8A-47EC-B959-514938C9E35B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
