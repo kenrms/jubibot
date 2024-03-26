@@ -7,15 +7,13 @@ using DiscordBot.Models;
 
 namespace DiscordBot
 {
-    public class BotService
+    public class BotService : IBotService
     {
         private readonly string discordToken;
         private readonly string openAiKey;
         private readonly BotBroker botBroker;
-
         private readonly DiscordSocketClient _client;
         private bool _isRunning;
-        private const float TEMP_DEFAULT = 0.6f;
 
         public float openAiTemp { get; private set; }
         public int openAiMaxTokens { get; private set; }
@@ -24,12 +22,6 @@ namespace DiscordBot
 
         public bool IsRunning() => _isRunning;
         public float GetTemperature() => botBroker.GetBotConfiguration().OpenAiTemperature;
-
-        public void SetTemperature(float newTemp)
-        {
-            openAiTemp = newTemp;
-            botBroker.UpdateOpenAiTemperature(newTemp);
-        }
 
         public BotService()
         {
@@ -56,26 +48,6 @@ namespace DiscordBot
             openAiTemp = botConfig.OpenAiTemperature;
             openAiSystemPrompt = botConfig.OpenAiSystemPrompt;
             openAiModel = botConfig.OpenAiModel;
-        }
-
-        public async Task StartBotAsync()
-        {
-            if (!_isRunning)
-            {
-                await _client.LoginAsync(TokenType.Bot, discordToken);
-                await _client.StartAsync();
-                _isRunning = true;
-            }
-        }
-
-        public async Task StopBotAsync()
-        {
-            if (_isRunning)
-            {
-                await _client.LogoutAsync();
-                await _client.StopAsync();
-                _isRunning = false;
-            }
         }
 
         private async Task LogToConsoleAsync(LogMessage message) =>
@@ -121,6 +93,50 @@ namespace DiscordBot
             {
                 await message.Channel.SendMessageAsync(response);
             }
+        }
+
+        public async Task StartBotAsync()
+        {
+            if (!_isRunning)
+            {
+                await _client.LoginAsync(TokenType.Bot, discordToken);
+                await _client.StartAsync();
+                _isRunning = true;
+            }
+        }
+
+        public async Task StopBotAsync()
+        {
+            if (_isRunning)
+            {
+                await _client.LogoutAsync();
+                await _client.StopAsync();
+                _isRunning = false;
+            }
+        }
+
+        public void SetTemperature(float newTemp)
+        {
+            openAiTemp = newTemp;
+            botBroker.UpdateOpenAiTemperature(newTemp);
+        }
+
+        public void SetOpenAiMaxTokens(int maxTokens)
+        {
+            openAiMaxTokens = maxTokens;
+            botBroker.UpdateOpenAiMaxTokens(maxTokens);
+        }
+
+        public void SetOpenAiModel(string model)
+        {
+            openAiModel = model;
+            botBroker.UpdateOpenAiModel(model);
+        }
+
+        public void SetOpenAiSystemPrompt(string systemPrompt)
+        {
+            openAiSystemPrompt = systemPrompt;
+            botBroker.UpdateOpenAiSystemPrompt(systemPrompt);
         }
     }
 }

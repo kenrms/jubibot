@@ -74,7 +74,8 @@ namespace DiscordBot.Brokers
         // Update OpenAiTemperature
         public void UpdateOpenAiTemperature(float newTemperature)
         {
-            var existingConfig = dbContext.BotConfigurations.FirstOrDefault();
+            BotConfiguration? existingConfig = dbContext.BotConfigurations.FirstOrDefault();
+
             if (existingConfig != null)
             {
                 existingConfig.OpenAiTemperature = newTemperature;
@@ -90,7 +91,8 @@ namespace DiscordBot.Brokers
         // Update OpenAiMaxTokens
         public void UpdateOpenAiMaxTokens(int newMaxTokens)
         {
-            var existingConfig = dbContext.BotConfigurations.FirstOrDefault();
+            BotConfiguration? existingConfig = dbContext.BotConfigurations.FirstOrDefault();
+
             if (existingConfig != null)
             {
                 existingConfig.OpenAiMaxTokens = newMaxTokens;
@@ -106,7 +108,8 @@ namespace DiscordBot.Brokers
         // Update OpenAiSystemPrompt
         public void UpdateOpenAiSystemPrompt(string newSystemPrompt)
         {
-            var existingConfig = dbContext.BotConfigurations.FirstOrDefault();
+            BotConfiguration? existingConfig = dbContext.BotConfigurations.FirstOrDefault();
+
             if (existingConfig != null)
             {
                 existingConfig.OpenAiSystemPrompt = newSystemPrompt;
