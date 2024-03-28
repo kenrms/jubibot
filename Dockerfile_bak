@@ -1,0 +1,23 @@
+# Use the official .NET SDK image as a build environment.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /app
+
+# Copy the .csproj files and restore the projects.
+COPY ./JubiAPI/*.csproj ./JubiAPI/
+COPY ./DiscordBot/*.csproj ./DiscordBot/
+RUN dotnet restore ./JubiAPI/JubiAPI.csproj
+
+# Copy everything else and build the project.
+COPY ./JubiAPI/ ./JubiAPI/
+COPY ./DiscordBot/ ./DiscordBot/
+RUN dotnet publish ./JubiAPI/JubiAPI.csproj -c Release -o out
+
+# Use the official .NET runtime image to create a final stage.
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+
+# Copy the build output from the build environment.
+COPY --from=build-env /app/out .
+
+# Run the application.
+ENTRYPOINT ["dotnet", "JubiAPI.dll"]

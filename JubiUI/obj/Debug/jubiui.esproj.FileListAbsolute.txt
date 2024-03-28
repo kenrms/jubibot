@@ -1,0 +1,2 @@
+D:\code\JubiUI\obj\Debug\jubiui.esproj.CoreCompileInputs.cache
+D:\code\DiscordBot\JubiUI\obj\Debug\jubiui.esproj.CoreCompileInputs.cache

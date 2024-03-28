@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JubiAPI", "JubiAPI\JubiAPI.csproj", "{CDA170F0-7854-4FDE-8250-6C30DC565401}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordBot", "DiscordBot\DiscordBot.csproj", "{8BB6D289-9678-45AD-AB64-2F6E03D9AD63}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "jubiui", "JubiUI\jubiui.esproj", "{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDA170F0-7854-4FDE-8250-6C30DC565401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA170F0-7854-4FDE-8250-6C30DC565401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA170F0-7854-4FDE-8250-6C30DC565401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA170F0-7854-4FDE-8250-6C30DC565401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB6D289-9678-45AD-AB64-2F6E03D9AD63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB6D289-9678-45AD-AB64-2F6E03D9AD63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB6D289-9678-45AD-AB64-2F6E03D9AD63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB6D289-9678-45AD-AB64-2F6E03D9AD63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B07FCCC-5CA5-41FA-AA54-94A7F29514D7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14267343-D687-4298-999A-5BC1F55B52AE}
+	EndGlobalSection
+EndGlobal
