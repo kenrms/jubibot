@@ -57,6 +57,10 @@ x64/
 *.pidb
 *.scc
 
+# Visual Studio files
+.vs/
+.vsidx
+
 # Visual C++ cache files
 ipch/
 *.aps

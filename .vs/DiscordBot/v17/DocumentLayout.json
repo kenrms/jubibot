@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\code\\DiscordBot\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|d:\\code\\discordbot\\jubiapi\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|solutionrelative:jubiapi\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|d:\\code\\discordbot\\jubiapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|solutionrelative:jubiapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|d:\\code\\discordbot\\jubiapi\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|solutionrelative:jubiapi\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -13,18 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|d:\\code\\discordbot\\jubiapi\\controllers\\botcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|solutionrelative:jubiapi\\controllers\\botcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|d:\\code\\discordbot\\jubiapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{CDA170F0-7854-4FDE-8250-6C30DC565401}|JubiAPI\\JubiAPI.csproj|solutionrelative:jubiapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\code\\DiscordBot\\Dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\code\\DiscordBot\\Dockerfile_bak||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Dockerfile_bak||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,11 +30,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": ".gitignore",
+              "DocumentMoniker": "D:\\code\\DiscordBot\\JubiAPI\\.gitignore",
+              "RelativeDocumentMoniker": "JubiAPI\\.gitignore",
+              "ToolTip": "D:\\code\\DiscordBot\\JubiAPI\\.gitignore",
+              "RelativeToolTip": "JubiAPI\\.gitignore",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAIwDoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-03-29T02:23:03.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\code\\DiscordBot\\JubiAPI\\Program.cs",
               "RelativeDocumentMoniker": "JubiAPI\\Program.cs",
@@ -46,12 +55,11 @@
               "RelativeToolTip": "JubiAPI\\Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACkAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-28T03:33:50.462Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-28T03:33:50.462Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "BotController.cs",
               "DocumentMoniker": "D:\\code\\DiscordBot\\JubiAPI\\Controllers\\BotController.cs",
               "RelativeDocumentMoniker": "JubiAPI\\Controllers\\BotController.cs",
@@ -59,59 +67,32 @@
               "RelativeToolTip": "JubiAPI\\Controllers\\BotController.cs",
               "ViewState": "AQIAAEQAAAAAAAAAAAA8wFgAAABNAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-28T01:12:55.125Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-28T01:12:55.125Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Dockerfile",
               "DocumentMoniker": "D:\\code\\DiscordBot\\JubiAPI\\Dockerfile",
               "RelativeDocumentMoniker": "JubiAPI\\Dockerfile",
               "ToolTip": "D:\\code\\DiscordBot\\JubiAPI\\Dockerfile",
               "RelativeToolTip": "JubiAPI\\Dockerfile",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAMAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-03-28T01:10:00.842Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "launchSettings.json",
               "DocumentMoniker": "D:\\code\\DiscordBot\\JubiAPI\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "JubiAPI\\Properties\\launchSettings.json",
               "ToolTip": "D:\\code\\DiscordBot\\JubiAPI\\Properties\\launchSettings.json",
               "RelativeToolTip": "JubiAPI\\Properties\\launchSettings.json",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAACAAAAAcAAAA",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAACcAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-03-28T00:23:51.733Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Dockerfile_bak",
-              "DocumentMoniker": "D:\\code\\DiscordBot\\Dockerfile_bak",
-              "RelativeDocumentMoniker": "Dockerfile_bak",
-              "ToolTip": "D:\\code\\DiscordBot\\Dockerfile_bak",
-              "RelativeToolTip": "Dockerfile_bak",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAYAAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-03-27T13:33:13.633Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Dockerfile",
-              "DocumentMoniker": "D:\\code\\DiscordBot\\Dockerfile",
-              "RelativeDocumentMoniker": "Dockerfile",
-              "ToolTip": "D:\\code\\DiscordBot\\Dockerfile",
-              "RelativeToolTip": "Dockerfile",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAtAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-03-27T12:50:47.394Z",
               "EditorCaption": ""
             }
           ]
