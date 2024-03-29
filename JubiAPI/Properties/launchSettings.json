@@ -35,8 +35,8 @@
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_HTTP_PORTS": "8080",
-        "DISCORD_TOKEN": "MTIyMDg4NzY5Nzg0MTg0ODQxMA.GNBN0j.yj_ffPXGb4Cldh-wQuhtF9T2V6vHWZDEuCiJx4",
-        "OPENAI_KEY": "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"
+        "DISCORD_TOKEN": "<>",
+        "OPENAI_KEY": "<>"
       },
       "publishAllPorts": true,
       "sslPort": 443,

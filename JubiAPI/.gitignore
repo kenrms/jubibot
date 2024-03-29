@@ -59,7 +59,7 @@ x64/
 
 # Visual Studio files
 .vs/
-.vsidx
+*.vsidx
 
 # Visual C++ cache files
 ipch/
