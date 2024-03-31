@@ -20,6 +20,8 @@ namespace JubiAPI.Controllers
         [HttpGet("status")]
         public IActionResult GetStatus()
         {
+            _logger.LogInformation("Retrieving Bot Status...");
+
             return Ok(new
             {
                 running = _botService.IsRunning(),
@@ -29,6 +31,8 @@ namespace JubiAPI.Controllers
         [HttpGet("botconfig")]
         public IActionResult GetBotConfiguration()
         {
+            _logger.LogInformation("Retrieving Bot Configuration...");
+
             return Ok(new BotConfiguration()
             {
                 OpenAiMaxTokens = _botService.openAiMaxTokens,
