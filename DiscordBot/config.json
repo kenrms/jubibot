@@ -1,5 +1,4 @@
 {
-  "AllowedHosts": "*",
   "DiscordToken": "",
   "OpenAiKey": ""
 }

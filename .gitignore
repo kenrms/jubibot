@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/JubiAPI/appsettings.Development.json
+/DiscordBot/config.Development.json
+*.drawio.bkp

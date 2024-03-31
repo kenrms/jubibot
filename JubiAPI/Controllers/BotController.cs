@@ -1,6 +1,7 @@
 ﻿using DiscordBot;
 using DiscordBot.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace JubiAPI.Controllers
 {
@@ -8,19 +9,17 @@ namespace JubiAPI.Controllers
     [ApiController]
     public class BotController : ControllerBase
     {
-        private readonly ILogger<BotController> _logger;
         private readonly IBotService _botService;
 
-        public BotController(ILogger<BotController> logger, IBotService botService)
+        public BotController(IBotService botService)
         {
-            _logger = logger;
             _botService = botService;
         }
 
         [HttpGet("status")]
         public IActionResult GetStatus()
         {
-            _logger.LogInformation("Retrieving Bot Status...");
+            Log.Information("Retrieving Bot Status...");
 
             return Ok(new
             {
@@ -31,7 +30,7 @@ namespace JubiAPI.Controllers
         [HttpGet("botconfig")]
         public IActionResult GetBotConfiguration()
         {
-            _logger.LogInformation("Retrieving Bot Configuration...");
+            Log.Information("Retrieving Bot Configuration...");
 
             return Ok(new BotConfiguration()
             {
@@ -45,7 +44,7 @@ namespace JubiAPI.Controllers
         [HttpPost("start")]
         public async ValueTask<IActionResult> StartBotAsync()
         {
-            _logger.LogInformation("Starting Discord Bot");
+            Log.Information("Starting Discord Bot");
             await _botService.StartBotAsync();
 
             return Ok();
@@ -54,7 +53,7 @@ namespace JubiAPI.Controllers
         [HttpPost("stop")]
         public async ValueTask<IActionResult> StopBotAsync()
         {
-            _logger.LogInformation("Stopping Discord Bot");
+            Log.Information("Stopping Discord Bot");
             await _botService.StopBotAsync();
 
             return Ok();
@@ -63,7 +62,7 @@ namespace JubiAPI.Controllers
         [HttpPost("temperature")]
         public IActionResult SetTemperature([FromBody] float temperature)
         {
-            _logger.LogInformation("Setting bot temperature to {temperature}", temperature);
+            Log.Information("Setting bot temperature to {temperature}", temperature);
             _botService.SetTemperature(temperature);
 
             return Ok();
@@ -72,7 +71,7 @@ namespace JubiAPI.Controllers
         [HttpPost("maxtokens")]
         public IActionResult SetMaxTokens([FromBody] int maxTokens)
         {
-            _logger.LogInformation("Setting bot maxtokens to {maxTokens}", maxTokens);
+            Log.Information("Setting bot maxtokens to {maxTokens}", maxTokens);
             _botService.SetOpenAiMaxTokens(maxTokens);
 
             return Ok();
@@ -81,7 +80,7 @@ namespace JubiAPI.Controllers
         [HttpPost("systemprompt")]
         public IActionResult SetSystemPrompt([FromBody] string prompt)
         {
-            _logger.LogInformation("Updating System prompt");
+            Log.Information("Updating System prompt");
             _botService.SetOpenAiSystemPrompt(prompt);
 
             return Ok();
@@ -90,7 +89,7 @@ namespace JubiAPI.Controllers
         [HttpPost("model")]
         public IActionResult SetModel([FromBody] string model)
         {
-            _logger.LogInformation("Setting openai model to {model}", model);
+            Log.Information("Setting openai model to {model}", model);
             _botService.SetOpenAiModel(model);
 
             return Ok();

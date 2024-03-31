@@ -4,10 +4,13 @@ using Discord;
 using Discord.WebSocket;
 using DiscordBot.Brokers;
 using DiscordBot.Models;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace DiscordBot
 {
-    public class BotService : IBotService
+    public class BotService : BackgroundService, IBotService
     {
         private readonly string discordToken;
         private readonly string openAiKey;
@@ -27,17 +30,28 @@ namespace DiscordBot
         {
             botBroker = new BotBroker();
             InitializeConfiguration();
-            discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-            openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
 
-            if (string.IsNullOrEmpty(discordToken) || string.IsNullOrEmpty(openAiKey))
-            {
-                throw new InvalidOperationException("Discord token or OpenAI key is missing from environment variables.");
-            }
+            // HACK retrieve env-specific vars because we don't have secrets yet
+            string environment = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "Development";
+            string configFile = $"appsettings.{environment}.json";
+            string configJson = File.ReadAllText(configFile);
+            dynamic config = JsonConvert.DeserializeObject(configJson);
+            discordToken = config.DiscordToken;
+            openAiKey = config.OpenAiKey;
+
+            //discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+            //openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
 
             _client = new DiscordSocketClient();
-            _client.Log += LogToConsoleAsync;
+
+            InitializeClient();
+        }
+
+        private void InitializeClient()
+        {
+            _client.Log += HandleDiscordClientLogging;
             _client.MessageReceived += MessageHandler;
+            _client.Ready += ReadyAsync;
             _isRunning = false;
         }
 
@@ -50,8 +64,12 @@ namespace DiscordBot
             openAiModel = botConfig.OpenAiModel;
         }
 
-        private async Task LogToConsoleAsync(LogMessage message) =>
-           Console.WriteLine(message.ToString());
+        private Task HandleDiscordClientLogging(LogMessage message)
+        {
+            Log.Information(message.ToString());
+
+            return Task.CompletedTask;
+        }
 
         private async Task MessageHandler(SocketMessage message)
         {
@@ -63,6 +81,11 @@ namespace DiscordBot
 
         private async Task<string> GetOpenAiResponse(string message)
         {
+            if (string.IsNullOrEmpty(openAiKey))
+            {
+                throw new Exception($"Invalid OpenAI key provided: {openAiKey}");
+            }
+
             var client = new OpenAIClient(openAiKey);
 
             var chatCompletionsOptions = new ChatCompletionsOptions
@@ -99,9 +122,15 @@ namespace DiscordBot
         {
             if (!_isRunning)
             {
+                if (string.IsNullOrEmpty(discordToken))
+                {
+                    throw new Exception($"Invalid Discord Token provided: {discordToken}");
+                }
+
                 await _client.LoginAsync(TokenType.Bot, discordToken);
                 await _client.StartAsync();
                 _isRunning = true;
+                Log.Information("Bot logged into Discord!");
             }
         }
 
@@ -112,6 +141,7 @@ namespace DiscordBot
                 await _client.LogoutAsync();
                 await _client.StopAsync();
                 _isRunning = false;
+                Log.Information("Bot logged out of Discord!");
             }
         }
 
@@ -137,6 +167,37 @@ namespace DiscordBot
         {
             openAiSystemPrompt = systemPrompt;
             botBroker.UpdateOpenAiSystemPrompt(systemPrompt);
+        }
+
+        private Task ReadyAsync()
+        {
+            Log.Information("Bot is connected and ready.");
+
+            return Task.CompletedTask;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            Log.Information("BotService starting...");
+            await StartBotAsync();
+            await Task.Delay(-1, stoppingToken);
+        }
+
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            Log.Information("BotService stopping...");
+
+            try
+            {
+                await StopBotAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred during BotService cleanup.");
+            }
+
+            await base.StopAsync(cancellationToken);
+            Log.Information("BotService stopped.");
         }
     }
 }
