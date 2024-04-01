@@ -24,7 +24,8 @@ jobs:
           context: .
           file: ./JubiAPI/Dockerfile
           push: true
-          tags: vonnduven/jubibotapi:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
 
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
@@ -35,7 +36,7 @@ jobs:
           script: |
             docker stop jubibotapi || true
             docker rm jubibotapi || true
-            docker pull vonnduven/jubibotapi:${{ github.sha }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
             docker run -d --restart unless-stopped --name jubibotapi \
               -v $(pwd)/certs:/app/certs:ro \
               -p 80:8080 -p 443:8081 \
@@ -48,5 +49,5 @@ jobs:
               -e OPENAI_KEY="${{ secrets.OPENAIKEY }}" \
               ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
             sleep 5
-            curl -X POST https://jubibot.com/api/Bot/start
-            curl https://jubibot.com/api/Bot/status
+            curl -X POST ${{ secrets.DOMAIN }}/api/Bot/start
+            curl ${{ secrets.DOMAIN }}/api/Bot/status
