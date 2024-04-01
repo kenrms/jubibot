@@ -21,7 +21,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.3.0
         with:
-          context: ./JubiAPI
+          context: .
+          file: ./JubiAPI
           push: true
           tags: vonnduven/jubibotapi:${{ github.sha }}
 
