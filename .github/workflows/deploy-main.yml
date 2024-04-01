@@ -48,5 +48,5 @@ jobs:
               -e OPENAI_KEY="${{ secrets.OPENAIKEY }}" \
               ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
             sleep 5
-            curl -X POST http://localhost/api/Bot/start
-            curl http://localhost/api/Bot/status
+            curl -X POST https://jubibot.com/api/Bot/start
+            curl https://jubibot.com/api/Bot/status
