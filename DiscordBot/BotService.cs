@@ -32,15 +32,15 @@ namespace DiscordBot
             InitializeConfiguration();
 
             // HACK retrieve env-specific vars because we don't have secrets yet
-            string environment = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "Development";
-            string configFile = $"appsettings.{environment}.json";
-            string configJson = File.ReadAllText(configFile);
-            dynamic config = JsonConvert.DeserializeObject(configJson);
-            discordToken = config.DiscordToken;
-            openAiKey = config.OpenAiKey;
+            //string environment = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "Development";
+            //string configFile = $"appsettings.{environment}.json";
+            //string configJson = File.ReadAllText(configFile);
+            //dynamic config = JsonConvert.DeserializeObject(configJson);
+            //discordToken = config.DiscordToken;
+            //openAiKey = config.OpenAiKey;
 
-            //discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-            //openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
+            discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+            openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
 
             _client = new DiscordSocketClient();
 
