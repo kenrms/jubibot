@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,13 +26,6 @@ jobs:
           push: true
           tags: vonnduven/jubibotapi:${{ github.sha }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Sleep for 30 seconds
-        run: sleep 30s
-        shell: bash
-        
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
         with:
