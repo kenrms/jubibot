@@ -39,3 +39,4 @@ jobs:
             docker run -d --restart unless-stopped --name jubibotapi -p 80:8080 -p 443:8081 -e DISCORD_TOKEN="${{ secrets.DISCORDTOKEN }}" -e OPENAI_KEY="${{ secrets.OPENAIKEY }}" ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
             sleep 5
             curl -X POST http://localhost/api/Bot/start
+            curl http://localhost/api/Bot/status
