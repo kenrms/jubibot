@@ -65,10 +65,10 @@ const AIConfigurationForm = () => {
         return response.json();
       })
       .then((data) => {
-        setSelectedModel(data.model);
-        setMaxTokens(data.maxTokens);
-        setTemperature(data.temperature);
-        setSystemPrompt(data.systemPrompt);
+        setSelectedModel(data.openAiModel);
+        setMaxTokens(data.openAiMaxTokens);
+        setTemperature(data.openAiTemperature);
+        setSystemPrompt(data.openAiSystemPrompt);
       })
       .catch((error) => {
         console.error("There was an error!", error);
