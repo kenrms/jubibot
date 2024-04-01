@@ -37,7 +37,7 @@ jobs:
             docker rm jubibotapi || true
             docker pull vonnduven/jubibotapi:${{ github.sha }}
             docker run -d --restart unless-stopped --name jubibotapi \
-              -v /etc/letsencrypt/live/jubibot.com/:/app/certs:ro \
+              -v /etc/letsencrypt/live/jubibot.com:/app/certs:ro \
               -p 80:8080 -p 443:8081 \
               -e ASPNETCORE_HTTPS_PORTS="8081" \
               -e ASPNETCORE_HTTP_PORTS="8080" \
