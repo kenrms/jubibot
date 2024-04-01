@@ -29,6 +29,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+        
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
         with:
