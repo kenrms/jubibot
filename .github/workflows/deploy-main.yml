@@ -37,12 +37,13 @@ jobs:
             docker rm jubibotapi || true
             docker pull vonnduven/jubibotapi:${{ github.sha }}
             docker run -d --restart unless-stopped --name jubibotapi \
-              -v $(pwd)/certs:/app/certs:ro \
+              -v /etc/letsencrypt/live/jubibot.com/:/app/certs:ro \
               -p 80:8080 -p 443:8081 \
               -e ASPNETCORE_HTTPS_PORTS="8081" \
               -e ASPNETCORE_HTTP_PORTS="8080" \
-              -e ASPNETCORE_Kestrel__Certificates__Default__Password="${{ secrets.CERT_PASSWORD }}" \
-              -e ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/https.pfx \
+              -e ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/app/certs/privkey.pem \
+              -e ASPNETCORE_Kestrel__Certificates__Default__KeyType=File \
+              -e ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/cert.pem \
               -e DISCORD_TOKEN="${{ secrets.DISCORDTOKEN }}" \
               -e OPENAI_KEY="${{ secrets.OPENAIKEY }}" \
               ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
