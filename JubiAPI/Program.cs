@@ -24,6 +24,7 @@ namespace JubiAPI
                 Log.Information("Starting web application");
                 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
                 builder.Host.UseSerilog();
+                builder.WebHost.UseKestrel();
 
                 builder.Services.AddCors(options =>
                 {
