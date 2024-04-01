@@ -42,7 +42,7 @@ jobs:
               -e ASPNETCORE_HTTPS_PORTS="8081" \
               -e ASPNETCORE_HTTP_PORTS="8080" \
               -e ASPNETCORE_Kestrel__Certificates__Default__Password="${{ secrets.CERT_PASSWORD }}" \
-              -e ASPNETCORE_Kestrel__Certificates__Default__Path=/certs/https.pfx \
+              -e ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/https.pfx \
               -e DISCORD_TOKEN="${{ secrets.DISCORDTOKEN }}" \
               -e OPENAI_KEY="${{ secrets.OPENAIKEY }}" \
               ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
