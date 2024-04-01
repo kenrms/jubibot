@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
-          file: ./JubiAPI
+          file: ./JubiAPI/Dockerfile
           push: true
           tags: vonnduven/jubibotapi:${{ github.sha }}
 
