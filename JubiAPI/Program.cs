@@ -15,7 +15,7 @@ namespace JubiAPI
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", name)
-                .WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
+                //.WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
                 .WriteTo.Console()
                 .CreateLogger();
 
@@ -28,12 +28,12 @@ namespace JubiAPI
 
                 builder.Services.AddCors(options =>
                 {
-                    options.AddPolicy("AllowOrigin",
+                    options.AddPolicy("AllowAnyOrigin",
                         policy =>
                         {
-                            policy.WithOrigins("*")
-                                .AllowAnyHeader()
-                                .AllowAnyMethod();
+                            policy.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
                         });
                 });
 
@@ -56,7 +56,7 @@ namespace JubiAPI
                 }
 
                 app.UseHttpsRedirection();
-                app.UseCors("AllowOrigin");
+                app.UseCors("AllowAnyOrigin");
                 app.UseAuthorization();
                 app.MapControllers();
 

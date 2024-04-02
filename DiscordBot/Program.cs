@@ -8,8 +8,6 @@ namespace DiscordBot
     {
         public static void Main(string[] args)
         {
-            // new BotService().StartBotAsync().GetAwaiter().GetResult();
-
             var name = typeof(Program).Assembly.GetName().Name;
 
             Log.Logger = new LoggerConfiguration()
@@ -17,7 +15,7 @@ namespace DiscordBot
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", name)
-                .WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
+                //.WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
                 .WriteTo.Console()
                 .CreateLogger();
 

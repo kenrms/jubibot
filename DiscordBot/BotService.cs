@@ -4,8 +4,8 @@ using Discord;
 using Discord.WebSocket;
 using DiscordBot.Brokers;
 using DiscordBot.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace DiscordBot
@@ -16,6 +16,7 @@ namespace DiscordBot
         private readonly string openAiKey;
         private readonly BotBroker botBroker;
         private readonly DiscordSocketClient _client;
+        private readonly IConfiguration _config;
         private bool _isRunning;
 
         public float openAiTemp { get; private set; }
@@ -26,21 +27,25 @@ namespace DiscordBot
         public bool IsRunning() => _isRunning;
         public float GetTemperature() => botBroker.GetBotConfiguration().OpenAiTemperature;
 
-        public BotService()
+        public BotService(IConfiguration config)
         {
             botBroker = new BotBroker();
             InitializeConfiguration();
 
-            // HACK retrieve env-specific vars because we don't have secrets yet
-            //string environment = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "Development";
-            //string configFile = $"appsettings.{environment}.json";
-            //string configJson = File.ReadAllText(configFile);
-            //dynamic config = JsonConvert.DeserializeObject(configJson);
-            //discordToken = config.DiscordToken;
-            //openAiKey = config.OpenAiKey;
 
-            discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-            openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
+            _config = config;
+            bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase);
+
+            if (isDevelopment)
+            {
+                discordToken = _config["DiscordToken"];
+                openAiKey = _config["OpenAiKey"];
+            }
+            else
+            {
+                discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+                openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
+            }
 
             _client = new DiscordSocketClient();
 

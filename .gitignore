@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 /JubiAPI/appsettings.Development.json
 /DiscordBot/config.Development.json
 *.drawio.bkp
+*.drawio.dtmp
