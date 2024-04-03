@@ -1,4 +1,6 @@
-using DiscordBot;
+using DiscordBot.Brokers;
+using DiscordBot.Contexts;
+using DiscordBot.Services;
 using JubiAPI.Middleware;
 using Serilog;
 
@@ -39,6 +41,7 @@ namespace JubiAPI
 
                 // Add services to the container.
                 builder.Services.AddSingleton<IBotService, BotService>();
+                builder.Services.AddSingleton<IBotBroker, BotEfBroker>();
 
                 builder.Services.AddControllers();
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

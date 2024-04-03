@@ -1,9 +1,9 @@
 ﻿using DiscordBot.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DiscordBot
+namespace DiscordBot.Contexts
 {
-    public class BotContext : DbContext
+    public class BotEfContext : DbContext
     {
         public DbSet<BotConfiguration> BotConfigurations { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace DiscordBot
+﻿namespace DiscordBot.Services
 {
     public interface IBotService
     {

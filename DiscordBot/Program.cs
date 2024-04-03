@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DiscordBot.Brokers;
+using DiscordBot.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
@@ -21,8 +23,15 @@ namespace DiscordBot
 
             try
             {
-                Log.Information("Starting web application");
-                CreateHostBuilder(args).Build().Run();
+                Log.Information("Starting console application");
+                var builder = CreateHostBuilder(args);
+
+                builder.ConfigureServices(services =>
+                {
+                    services.AddSingleton<IBotBroker, BotEfBroker>();
+                });
+
+                builder.Build().Run();
             }
             catch (Exception ex)
             {

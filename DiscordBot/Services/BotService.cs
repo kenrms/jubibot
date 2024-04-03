@@ -8,13 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace DiscordBot
+namespace DiscordBot.Services
 {
     public class BotService : BackgroundService, IBotService
     {
         private readonly string discordToken;
         private readonly string openAiKey;
-        private readonly BotBroker botBroker;
+        private readonly IBotBroker _botBroker;
         private readonly DiscordSocketClient _client;
         private readonly IConfiguration _config;
         private bool _isRunning;
@@ -25,15 +25,14 @@ namespace DiscordBot
         public string openAiModel { get; private set; }
 
         public bool IsRunning() => _isRunning;
-        public float GetTemperature() => botBroker.GetBotConfiguration().OpenAiTemperature;
+        public float GetTemperature() => _botBroker.GetBotConfiguration().OpenAiTemperature;
 
-        public BotService(IConfiguration config)
+        public BotService(IConfiguration config, IBotBroker botBroker)
         {
-            botBroker = new BotBroker();
+            _botBroker = botBroker;
+            _config = config;
             InitializeConfiguration();
 
-
-            _config = config;
             bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase);
 
             if (isDevelopment)
@@ -48,7 +47,6 @@ namespace DiscordBot
             }
 
             _client = new DiscordSocketClient();
-
             InitializeClient();
         }
 
@@ -62,7 +60,7 @@ namespace DiscordBot
 
         private void InitializeConfiguration()
         {
-            BotConfiguration botConfig = botBroker.GetBotConfiguration();
+            BotConfiguration botConfig = _botBroker.GetBotConfiguration();
             openAiMaxTokens = botConfig.OpenAiMaxTokens;
             openAiTemp = botConfig.OpenAiTemperature;
             openAiSystemPrompt = botConfig.OpenAiSystemPrompt;
@@ -153,25 +151,25 @@ namespace DiscordBot
         public void SetTemperature(float newTemp)
         {
             openAiTemp = newTemp;
-            botBroker.UpdateOpenAiTemperature(newTemp);
+            _botBroker.UpdateOpenAiTemperature(newTemp);
         }
 
         public void SetOpenAiMaxTokens(int maxTokens)
         {
             openAiMaxTokens = maxTokens;
-            botBroker.UpdateOpenAiMaxTokens(maxTokens);
+            _botBroker.UpdateOpenAiMaxTokens(maxTokens);
         }
 
         public void SetOpenAiModel(string model)
         {
             openAiModel = model;
-            botBroker.UpdateOpenAiModel(model);
+            _botBroker.UpdateOpenAiModel(model);
         }
 
         public void SetOpenAiSystemPrompt(string systemPrompt)
         {
             openAiSystemPrompt = systemPrompt;
-            botBroker.UpdateOpenAiSystemPrompt(systemPrompt);
+            _botBroker.UpdateOpenAiSystemPrompt(systemPrompt);
         }
 
         private Task ReadyAsync()

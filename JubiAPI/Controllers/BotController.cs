@@ -1,5 +1,5 @@
-﻿using DiscordBot;
-using DiscordBot.Models;
+﻿using DiscordBot.Models;
+using DiscordBot.Services;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
