@@ -47,8 +47,8 @@ jobs:
               -e ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/fullchain.pem \
               -e DISCORD_TOKEN="${{ secrets.DISCORDTOKEN }}" \
               -e OPENAI_KEY="${{ secrets.OPENAIKEY }}" \
-              -e AWSACCESSKEY="${{ secrets.AWSACCESSKEY }}" \
-              -e AWSSECRET="${{ secrets.AWSSECRET }}" \
+              -e AWSAccessKey="${{ secrets.AWSACCESSKEY }}" \
+              -e AWSSecret="${{ secrets.AWSSECRET }}" \
               ${{ secrets.DOCKER_USERNAME }}/jubibotapi:${{ github.sha }}
             sleep 5
             curl -X POST ${{ secrets.DOMAIN }}/api/Bot/start
