@@ -25,8 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.302.7" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.302.16" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.302.50" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="7.0.0" />

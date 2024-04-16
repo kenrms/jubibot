@@ -15,34 +15,21 @@ namespace DiscordBot.Brokers
             EnsureDefaultConfiguration();
         }
 
-        // Create a new BotConfiguration record
-        public void CreateBotConfiguration(float openAiTemperature, int openAiMaxTokens, string openAiSystemPrompt)
-        {
-            var config = new BotConfiguration
-            {
-                OpenAiTemperature = openAiTemperature,
-                OpenAiMaxTokens = openAiMaxTokens,
-                OpenAiSystemPrompt = openAiSystemPrompt
-            };
-            dbContext.BotConfigurations.Add(config);
-            dbContext.SaveChanges();
-        }
-
         // Read the BotConfiguration record
-        public BotConfiguration GetBotConfiguration()
+        public async Task<BotConfiguration> GetBotConfiguration()
         {
             return dbContext.BotConfigurations.FirstOrDefault();
         }
 
         // Update OpenAiTemperature
-        public void UpdateOpenAiTemperature(float newTemperature)
+        public async Task UpdateOpenAiTemperature(float newTemperature)
         {
             BotConfiguration? existingConfig = dbContext.BotConfigurations.FirstOrDefault();
 
             if (existingConfig != null)
             {
                 existingConfig.OpenAiTemperature = newTemperature;
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             else
             {
@@ -52,14 +39,14 @@ namespace DiscordBot.Brokers
         }
 
         // Update OpenAiMaxTokens
-        public void UpdateOpenAiMaxTokens(int newMaxTokens)
+        public async Task UpdateOpenAiMaxTokens(int newMaxTokens)
         {
             BotConfiguration? existingConfig = dbContext.BotConfigurations.FirstOrDefault();
 
             if (existingConfig != null)
             {
                 existingConfig.OpenAiMaxTokens = newMaxTokens;
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             else
             {
@@ -69,14 +56,14 @@ namespace DiscordBot.Brokers
         }
 
         // Update OpenAiSystemPrompt
-        public void UpdateOpenAiSystemPrompt(string newSystemPrompt)
+        public async Task UpdateOpenAiSystemPrompt(string newSystemPrompt)
         {
             BotConfiguration? existingConfig = dbContext.BotConfigurations.FirstOrDefault();
 
             if (existingConfig != null)
             {
                 existingConfig.OpenAiSystemPrompt = newSystemPrompt;
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             else
             {
@@ -86,13 +73,13 @@ namespace DiscordBot.Brokers
         }
 
         // Update OpenAiModel
-        public void UpdateOpenAiModel(string newModel)
+        public async Task UpdateOpenAiModel(string newModel)
         {
             var existingConfig = dbContext.BotConfigurations.FirstOrDefault();
             if (existingConfig != null)
             {
                 existingConfig.OpenAiModel = newModel;
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             else
             {

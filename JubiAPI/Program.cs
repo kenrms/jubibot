@@ -1,5 +1,4 @@
 using DiscordBot.Brokers;
-using DiscordBot.Contexts;
 using DiscordBot.Services;
 using JubiAPI.Middleware;
 using Serilog;
@@ -17,7 +16,7 @@ namespace JubiAPI
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", name)
-                //.WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
+                .WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
                 .WriteTo.Console()
                 .CreateLogger();
 
@@ -41,7 +40,7 @@ namespace JubiAPI
 
                 // Add services to the container.
                 builder.Services.AddSingleton<IBotService, BotService>();
-                builder.Services.AddSingleton<IBotBroker, BotEfBroker>();
+                builder.Services.AddSingleton<IBotBroker, DynamoDBBotBroker>();
 
                 builder.Services.AddControllers();
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

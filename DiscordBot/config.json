@@ -1,4 +1,8 @@
 {
   "DiscordToken": "",
-  "OpenAiKey": ""
+  "OpenAiKey": "",
+  "AWS": {
+    "Region": "us-east-1",
+    "Profile": "jubibot"
+  }
 }

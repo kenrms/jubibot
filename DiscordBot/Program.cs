@@ -1,5 +1,7 @@
-﻿using DiscordBot.Brokers;
+﻿using Amazon.DynamoDBv2;
+using DiscordBot.Brokers;
 using DiscordBot.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -17,7 +19,7 @@ namespace DiscordBot
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", name)
-                //.WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
+                .WriteTo.Seq(serverUrl: "http://host.docker.internal:5341")    // only for local dev
                 .WriteTo.Console()
                 .CreateLogger();
 
@@ -28,7 +30,7 @@ namespace DiscordBot
 
                 builder.ConfigureServices(services =>
                 {
-                    services.AddSingleton<IBotBroker, BotEfBroker>();
+                    services.AddSingleton<IBotBroker, DynamoDBBotBroker>();
                 });
 
                 builder.Build().Run();
@@ -43,12 +45,19 @@ namespace DiscordBot
             }
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    Amazon.Extensions.NETCore.Setup.AWSOptions awsOptions = hostContext.Configuration.GetAWSOptions();
+                    Console.WriteLine($"BOT | AWS Region: {awsOptions.Region}");
+                    Console.WriteLine($"BOT | AWS Profile: {awsOptions.Profile}");
+                    services.AddDefaultAWSOptions(hostContext.Configuration.GetAWSOptions());
+                    services.AddAWSService<IAmazonDynamoDB>();
                     services.AddHostedService<BotService>();
                 })
                 .UseSerilog();
+        }
     }
 }

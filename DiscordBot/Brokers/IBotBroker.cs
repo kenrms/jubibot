@@ -4,10 +4,10 @@ namespace DiscordBot.Brokers
 {
     public interface IBotBroker
     {
-        public BotConfiguration GetBotConfiguration();
-        public void UpdateOpenAiTemperature(float newTemperature);
-        public void UpdateOpenAiMaxTokens(int newMaxTokens);
-        public void UpdateOpenAiModel(string newModel);
-        public void UpdateOpenAiSystemPrompt(string newSystemPrompt);
+        public Task<BotConfiguration> GetBotConfiguration();
+        public Task UpdateOpenAiTemperature(float newTemperature);
+        public Task UpdateOpenAiMaxTokens(int newMaxTokens);
+        public Task UpdateOpenAiModel(string newModel);
+        public Task UpdateOpenAiSystemPrompt(string newSystemPrompt);
     }
 }

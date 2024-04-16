@@ -25,13 +25,13 @@ namespace DiscordBot.Services
         public string openAiModel { get; private set; }
 
         public bool IsRunning() => _isRunning;
-        public float GetTemperature() => _botBroker.GetBotConfiguration().OpenAiTemperature;
+        public async Task<float> GetTemperatureAsync() => (await _botBroker.GetBotConfiguration()).OpenAiTemperature;
 
         public BotService(IConfiguration config, IBotBroker botBroker)
         {
             _botBroker = botBroker;
             _config = config;
-            InitializeConfiguration();
+            InitializeConfigurationAsync().Wait();
 
             bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase);
 
@@ -58,9 +58,9 @@ namespace DiscordBot.Services
             _isRunning = false;
         }
 
-        private void InitializeConfiguration()
+        private async Task InitializeConfigurationAsync()
         {
-            BotConfiguration botConfig = _botBroker.GetBotConfiguration();
+            BotConfiguration botConfig = await _botBroker.GetBotConfiguration();
             openAiMaxTokens = botConfig.OpenAiMaxTokens;
             openAiTemp = botConfig.OpenAiTemperature;
             openAiSystemPrompt = botConfig.OpenAiSystemPrompt;
