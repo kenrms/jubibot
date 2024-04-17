@@ -83,6 +83,7 @@ namespace DiscordBot.Services
         {
             if (message.Author.IsBot || string.IsNullOrEmpty(message.Content)) return;
 
+            var channel = message.Channel;
             var channelId = message.Channel.Id;
             var messageContent = message.Content;
             var userName = message.Author.Username;
@@ -111,7 +112,7 @@ namespace DiscordBot.Services
             {
                 Timestamp = DateTime.UtcNow,
                 Username = _botName,
-                Message = response
+                Message = response,
             });
 
             await ReplyAsync(message, response);
@@ -136,7 +137,25 @@ namespace DiscordBot.Services
                 }
                 else
                 {
-                    messages.Add(new ChatRequestUserMessage($"{message.Username}: {message.Message}"));
+                    string body = string.Empty;
+
+                    if (!string.IsNullOrEmpty(message.ReferenceMessage))
+                    {
+                        body = $"This message is in response to another message. Here is the response: \n\n --- \n\n " +
+                            $"Author: {message.Username}\n" +
+                            $"Message: {message.Message}\n\n" +
+                            $"---\n\n" +
+                            $"This is the message this this is responding to:\n\n" +
+                            $"---\n\n" +
+                            $"Reference Author: {message.ReferenceAuthor}\n" +
+                            $"Refereance Message: {message.ReferenceMessage}";
+                    }
+                    else
+                    {
+                        body = $"Author: {message.Username} \nMessage: {message.Message}";
+                    }
+
+                    messages.Add(new ChatRequestUserMessage(body));
                 }
             }
 
