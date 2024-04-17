@@ -18,6 +18,10 @@ namespace DiscordBot.Services
         private readonly DiscordSocketClient _client;
         private readonly IConfiguration _config;
         private bool _isRunning;
+        private const int maxConversationHistory = 100;
+        private readonly string _botName = Guid.NewGuid().ToString();
+
+        private Dictionary<ulong, Queue<DiscordMessage>> _conversationHistory;
 
         public float openAiTemp { get; private set; }
         public int openAiMaxTokens { get; private set; }
@@ -47,6 +51,7 @@ namespace DiscordBot.Services
             }
 
             _client = new DiscordSocketClient();
+            _conversationHistory = new Dictionary<ulong, Queue<DiscordMessage>>();
             InitializeClient();
         }
 
@@ -78,11 +83,41 @@ namespace DiscordBot.Services
         {
             if (message.Author.IsBot || string.IsNullOrEmpty(message.Content)) return;
 
-            string response = await GetOpenAiResponse(message.Content);
+            var channelId = message.Channel.Id;
+            var messageContent = message.Content;
+            var userName = message.Author.Username;
+
+            Log.Information($"Received message in {channelId} from {userName}: {messageContent}");
+
+            if (!_conversationHistory.ContainsKey(channelId))
+            {
+                _conversationHistory[channelId] = new Queue<DiscordMessage>();
+            }
+
+            var channelConversation = _conversationHistory[channelId];
+
+            if (channelConversation.Count >= maxConversationHistory)
+            {
+                channelConversation.Dequeue();
+            }
+
+            channelConversation.Enqueue(new DiscordMessage(message));
+
+            string response = await GetOpenAiResponse(channelConversation);
+            Log.Information($"Response from bot in {channelId}: {response}");
+
+            // include bot response for now also
+            channelConversation.Enqueue(new DiscordMessage
+            {
+                Timestamp = DateTime.UtcNow,
+                Username = _botName,
+                Message = response
+            });
+
             await ReplyAsync(message, response);
         }
 
-        private async Task<string> GetOpenAiResponse(string message)
+        private async Task<string> GetOpenAiResponse(Queue<DiscordMessage> channelConversation)
         {
             if (string.IsNullOrEmpty(openAiKey))
             {
@@ -91,16 +126,24 @@ namespace DiscordBot.Services
 
             var client = new OpenAIClient(openAiKey);
 
-            var chatCompletionsOptions = new ChatCompletionsOptions
+            var messages = new List<ChatRequestMessage> { new ChatRequestSystemMessage(openAiSystemPrompt), };
+
+            foreach (var message in channelConversation)
             {
-                DeploymentName = openAiModel,
-                Messages =
+                if (message.Username == _botName)
                 {
-                    new ChatRequestSystemMessage(openAiSystemPrompt),
-                    new ChatRequestUserMessage(message),
-                },
+                    messages.Add(new ChatRequestAssistantMessage($"{message.Message}"));
+                }
+                else
+                {
+                    messages.Add(new ChatRequestUserMessage($"{message.Username}: {message.Message}"));
+                }
+            }
+
+            var chatCompletionsOptions = new ChatCompletionsOptions(openAiModel, messages)
+            {
                 Temperature = openAiTemp,
-                MaxTokens = openAiMaxTokens,
+                MaxTokens = openAiMaxTokens
             };
 
             Response<ChatCompletions> response = await client.GetChatCompletionsAsync(chatCompletionsOptions);
