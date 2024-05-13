@@ -83,10 +83,10 @@ namespace DiscordBot.Services
         {
             if (message.Author.IsBot || string.IsNullOrEmpty(message.Content)) return;
 
-            var channel = message.Channel;
             var channelId = message.Channel.Id;
             var messageContent = message.Content;
             var userName = message.Author.Username;
+            var timestamp = message.Timestamp;
 
             Log.Information($"Received message in {channelId} from {userName}: {messageContent}");
 
@@ -103,7 +103,6 @@ namespace DiscordBot.Services
             }
 
             channelConversation.Enqueue(new DiscordMessage(message));
-
             string response = await GetOpenAiResponse(channelConversation);
             Log.Information($"Response from bot in {channelId}: {response}");
 
@@ -165,10 +164,19 @@ namespace DiscordBot.Services
                 MaxTokens = openAiMaxTokens
             };
 
-            Response<ChatCompletions> response = await client.GetChatCompletionsAsync(chatCompletionsOptions);
-            ChatResponseMessage responseMessage = response.Value.Choices[0].Message;
+            try
+            {
+                Response<ChatCompletions> response = await client.GetChatCompletionsAsync(chatCompletionsOptions);
+                ChatResponseMessage responseMessage = response.Value.Choices[0].Message;
 
-            return responseMessage.Content;
+                return responseMessage.Content;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error getting OpenAI response");
+
+                return "Sorry, there was an error getting a response from OpenAI. Please try again later.";
+            }
         }
 
         private static async Task ReplyAsync(SocketMessage message, string response)
