@@ -1,4 +1,6 @@
-﻿using Azure;
+﻿using System.Net;
+using System.Text.Json;
+using Azure;
 using Azure.AI.OpenAI;
 using Discord;
 using Discord.WebSocket;
@@ -21,7 +23,7 @@ namespace DiscordBot.Services
         private const int maxConversationHistory = 100;
         private readonly string _botName = Guid.NewGuid().ToString();
 
-        private Dictionary<ulong, Queue<DiscordMessage>> _conversationHistory;
+        private Dictionary<ulong, LinkedList<DiscordMessage>> _conversationHistory;
 
         public float openAiTemp { get; private set; }
         public int openAiMaxTokens { get; private set; }
@@ -51,7 +53,7 @@ namespace DiscordBot.Services
             }
 
             _client = new DiscordSocketClient();
-            _conversationHistory = new Dictionary<ulong, Queue<DiscordMessage>>();
+            _conversationHistory = new Dictionary<ulong, LinkedList<DiscordMessage>>();
             InitializeClient();
         }
 
@@ -92,32 +94,39 @@ namespace DiscordBot.Services
 
             if (!_conversationHistory.ContainsKey(channelId))
             {
-                _conversationHistory[channelId] = new Queue<DiscordMessage>();
+                _conversationHistory[channelId] = new LinkedList<DiscordMessage>();
             }
 
             var channelConversation = _conversationHistory[channelId];
 
             if (channelConversation.Count >= maxConversationHistory)
             {
-                channelConversation.Dequeue();
+                channelConversation.RemoveFirst();
             }
 
-            channelConversation.Enqueue(new DiscordMessage(message));
-            string response = await GetOpenAiResponse(channelConversation);
-            Log.Information($"Response from bot in {channelId}: {response}");
+            // TODO validate message content before adding to history and getting response. It could be some dumb shit.
+            channelConversation.AddLast(new DiscordMessage(message));
+            OpenAiResponse response = await GetOpenAiResponse(channelConversation);
+
+            if (response.Status == OpenAiResponseStatus.Error)
+            {
+                channelConversation.RemoveLast();
+            }
+
+            Log.Information($"Response from bot in {channelId}: {response.Content}");
 
             // include bot response for now also
-            channelConversation.Enqueue(new DiscordMessage
+            channelConversation.AddLast(new DiscordMessage
             {
                 Timestamp = DateTime.UtcNow,
                 Username = _botName,
-                Message = response,
+                Message = response.Content,
             });
 
-            await ReplyAsync(message, response);
+            await ReplyAsync(message, response.Content);
         }
 
-        private async Task<string> GetOpenAiResponse(Queue<DiscordMessage> channelConversation)
+        private async Task<OpenAiResponse> GetOpenAiResponse(IEnumerable<DiscordMessage> channelConversation)
         {
             if (string.IsNullOrEmpty(openAiKey))
             {
@@ -125,7 +134,6 @@ namespace DiscordBot.Services
             }
 
             var client = new OpenAIClient(openAiKey);
-
             var messages = new List<ChatRequestMessage> { new ChatRequestSystemMessage(openAiSystemPrompt), };
 
             foreach (var message in channelConversation)
@@ -136,7 +144,7 @@ namespace DiscordBot.Services
                 }
                 else
                 {
-                    string body = string.Empty;
+                    string body;
 
                     if (!string.IsNullOrEmpty(message.ReferenceMessage))
                     {
@@ -169,13 +177,23 @@ namespace DiscordBot.Services
                 Response<ChatCompletions> response = await client.GetChatCompletionsAsync(chatCompletionsOptions);
                 ChatResponseMessage responseMessage = response.Value.Choices[0].Message;
 
-                return responseMessage.Content;
+                return new OpenAiResponse
+                {
+                    Content = responseMessage.Content,
+                    Status = OpenAiResponseStatus.Success,
+                };
             }
-            catch (Exception ex)
+            catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.BadRequest)
             {
-                Log.Error(ex, "Error getting OpenAI response");
+                var errorContent = JsonSerializer.Deserialize<OpenAIError>(ex.Message);
+                Log.Error("Error: BadRequest received from OpenAI.");
+                Log.Error("Reason: {0}", errorContent.Error.Message);
 
-                return "Sorry, there was an error getting a response from OpenAI. Please try again later.";
+                return new OpenAiResponse
+                {
+                    Content = "It seems that prompt was invalid. Maybe it was too long or repetitive. Try something else?",
+                    Status = OpenAiResponseStatus.Error,
+                };
             }
         }
 
@@ -274,3 +292,4 @@ namespace DiscordBot.Services
         }
     }
 }
+
