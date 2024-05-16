@@ -185,9 +185,7 @@ namespace DiscordBot.Services
             }
             catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.BadRequest)
             {
-                var errorContent = JsonSerializer.Deserialize<OpenAIError>(ex.Message);
-                Log.Error("Error: BadRequest received from OpenAI.");
-                Log.Error("Reason: {0}", errorContent.Error.Message);
+                Log.Error("Error: BadRequest received from OpenAI.", ex);
 
                 return new OpenAiResponse
                 {
