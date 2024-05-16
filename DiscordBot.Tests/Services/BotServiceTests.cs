@@ -46,7 +46,7 @@ namespace DiscordBot.Tests.Services
             new AutoFaker<BotConfiguration>().Generate();
 
         [Fact]
-        public async void ShouldStartAsync()
+        public async void ShouldStartBotAsync()
         {
             // given
             TokenType inputTokenType = TokenType.Bot;
@@ -73,6 +73,35 @@ namespace DiscordBot.Tests.Services
 
             discordClientBrokerMock.Verify(broker =>
                 broker.StartAsync(),
+                Times.Once);
+        }
+
+        [Fact]
+        public async void ShouldStopBotAsync()
+        {
+            // given
+            discordClientBrokerMock
+                .Setup(broker => broker.LogoutAsync())
+                .Returns(Task.CompletedTask);
+
+            discordClientBrokerMock
+                .Setup(broker => broker.StopAsync())
+                .Returns(Task.CompletedTask);
+
+            await botService.StartBotAsync();
+
+            // when
+            await botService.StopBotAsync();
+
+            // then
+            botService.IsRunning().Should().BeFalse();
+
+            discordClientBrokerMock.Verify(broker =>
+                broker.LogoutAsync(),
+                Times.Once);
+
+            discordClientBrokerMock.Verify(broker =>
+                broker.StopAsync(),
                 Times.Once);
         }
     }
