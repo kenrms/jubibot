@@ -39,8 +39,10 @@ namespace JubiAPI
                 });
 
                 // Add services to the container.
+                builder.Services.AddSingleton<ICustomConfiguration, CustomConfiguration>();
                 builder.Services.AddSingleton<IBotService, BotService>();
                 builder.Services.AddSingleton<IBotBroker, DynamoDBBotBroker>();
+                builder.Services.AddSingleton<IDiscordClientBroker, DiscordClientBroker>();
 
                 builder.Services.AddControllers();
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

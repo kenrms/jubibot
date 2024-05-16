@@ -30,7 +30,9 @@ namespace DiscordBot
 
                 builder.ConfigureServices(services =>
                 {
+                    services.AddSingleton<ICustomConfiguration, CustomConfiguration>();
                     services.AddSingleton<IBotBroker, DynamoDBBotBroker>();
+                    services.AddSingleton<IDiscordClientBroker, DiscordClientBroker>();
                 });
 
                 builder.Build().Run();
