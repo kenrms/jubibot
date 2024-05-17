@@ -15,7 +15,7 @@ COPY ["DiscordBot.Tests/DiscordBot.Tests.csproj", "DiscordBot.Tests/"]
 RUN dotnet restore "./JubiAPI/JubiAPI.csproj"
 COPY . .
 WORKDIR "/src/DiscordBot.Tests"
-RUN dotnet test "./DiscordBot.Tests" -c $BUILD_CONFIGURATION --logger:trx
+RUN dotnet test "./DiscordBot.Tests.csproj" -c $BUILD_CONFIGURATION --logger:trx
 WORKDIR "/src/JubiAPI"
 RUN dotnet build "./JubiAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
