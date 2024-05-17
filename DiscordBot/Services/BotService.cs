@@ -125,13 +125,16 @@ namespace DiscordBot.Services
 
         private string CheckCommands(SocketMessage message, LinkedList<DiscordMessage> channelConversation)
         {
-            if (message.Author.Username != "vonnycakes") return "You aren't Vonn >:C";
+            bool isAdmin = message.Author.Username == "vonnycakes";
 
-            if (message.Content.ToLower().Trim() == "j!clear")
+            if (isAdmin)
             {
-                ClearChannelConversation(message.Channel.Id, channelConversation);
+                if (message.Content.ToLower().Trim().Contains("j!clear"))
+                {
+                    ClearChannelConversation(message.Channel.Id, channelConversation);
 
-                return "Conversation cleared!";
+                    return "Conversation cleared!";
+                }
             }
 
             return string.Empty;
