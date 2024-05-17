@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json;
 using Azure;
 using Azure.AI.OpenAI;
 using Discord;
@@ -104,6 +103,9 @@ namespace DiscordBot.Services
                 channelConversation.RemoveFirst();
             }
 
+            bool isCommand = CheckCommands(message, channelConversation);
+            if (isCommand) return;
+
             // TODO validate message content before adding to history and getting response. It could be some dumb shit.
             channelConversation.AddLast(new DiscordMessage(message));
             OpenAiResponse response = await GetOpenAiResponse(channelConversation);
@@ -125,6 +127,21 @@ namespace DiscordBot.Services
 
             await ReplyAsync(message, response.Content);
         }
+
+        private bool CheckCommands(SocketMessage message, LinkedList<DiscordMessage> channelConversation)
+        {
+            if (message.Author.Username != "vonnycakes") return true;
+
+            if (message.Content.ToLower() == "j!clear")
+            {
+                ClearChannelConversation(channelConversation);
+            }
+
+            return true;
+        }
+
+        private void ClearChannelConversation(LinkedList<DiscordMessage> channelConversation) =>
+            channelConversation.Clear();
 
         private async Task<OpenAiResponse> GetOpenAiResponse(IEnumerable<DiscordMessage> channelConversation)
         {
