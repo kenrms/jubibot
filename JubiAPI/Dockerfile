@@ -17,7 +17,7 @@ COPY . .
 WORKDIR "/src/JubiAPI"
 RUN dotnet build "./JubiAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build as test
+FROM build AS test
 WORKDIR "/src/DiscordBot.Tests"
 RUN dotnet test --logger:trx
 
