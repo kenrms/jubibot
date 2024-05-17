@@ -5,7 +5,6 @@ using Discord;
 using Discord.WebSocket;
 using DiscordBot.Brokers;
 using DiscordBot.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
@@ -16,12 +15,11 @@ namespace DiscordBot.Services
         private readonly string discordToken;
         private readonly string openAiKey;
         private readonly IBotBroker _botBroker;
-        private readonly DiscordSocketClient _client;
-        private readonly IConfiguration _config;
+        private readonly IDiscordClientBroker _discordClientBroker;
+        private readonly ICustomConfiguration _config;
         private bool _isRunning;
         private const int maxConversationHistory = 100;
         private readonly string _botName = Guid.NewGuid().ToString();
-
         private Dictionary<ulong, LinkedList<DiscordMessage>> _conversationHistory;
 
         public float openAiTemp { get; private set; }
@@ -32,35 +30,23 @@ namespace DiscordBot.Services
         public bool IsRunning() => _isRunning;
         public async Task<float> GetTemperatureAsync() => (await _botBroker.GetBotConfiguration()).OpenAiTemperature;
 
-        public BotService(IConfiguration config, IBotBroker botBroker)
+        public BotService(ICustomConfiguration config, IBotBroker botBroker, IDiscordClientBroker discordClientBroker)
         {
             _botBroker = botBroker;
             _config = config;
+            _discordClientBroker = discordClientBroker;
             InitializeConfigurationAsync().Wait();
-
-            bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase);
-
-            if (isDevelopment)
-            {
-                discordToken = _config["DiscordToken"];
-                openAiKey = _config["OpenAiKey"];
-            }
-            else
-            {
-                discordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-                openAiKey = Environment.GetEnvironmentVariable("OPENAI_KEY");
-            }
-
-            _client = new DiscordSocketClient();
+            discordToken = _config.GetDiscordToken();
+            openAiKey = _config.GetOpenAiKey();
             _conversationHistory = new Dictionary<ulong, LinkedList<DiscordMessage>>();
             InitializeClient();
         }
 
         private void InitializeClient()
         {
-            _client.Log += HandleDiscordClientLogging;
-            _client.MessageReceived += MessageHandler;
-            _client.Ready += ReadyAsync;
+            _discordClientBroker.Log += HandleDiscordClientLogging;
+            _discordClientBroker.MessageReceived += MessageHandler;
+            _discordClientBroker.Ready += ReadyAsync;
             _isRunning = false;
         }
 
@@ -150,7 +136,7 @@ namespace DiscordBot.Services
                 throw new Exception($"Invalid OpenAI key provided: {openAiKey}");
             }
 
-            var client = new OpenAIClient(openAiKey);
+            var openAiClient = new OpenAIClient(openAiKey);
             var messages = new List<ChatRequestMessage> { new ChatRequestSystemMessage(openAiSystemPrompt), };
 
             foreach (var message in channelConversation)
@@ -191,7 +177,7 @@ namespace DiscordBot.Services
 
             try
             {
-                Response<ChatCompletions> response = await client.GetChatCompletionsAsync(chatCompletionsOptions);
+                Response<ChatCompletions> response = await openAiClient.GetChatCompletionsAsync(chatCompletionsOptions);
                 ChatResponseMessage responseMessage = response.Value.Choices[0].Message;
 
                 return new OpenAiResponse
@@ -233,8 +219,8 @@ namespace DiscordBot.Services
                     throw new Exception($"Invalid Discord Token provided: {discordToken}");
                 }
 
-                await _client.LoginAsync(TokenType.Bot, discordToken);
-                await _client.StartAsync();
+                await _discordClientBroker.LoginAsync(TokenType.Bot, discordToken);
+                await _discordClientBroker.StartAsync();
                 _isRunning = true;
                 Log.Information("Bot logged into Discord!");
             }
@@ -244,8 +230,8 @@ namespace DiscordBot.Services
         {
             if (_isRunning)
             {
-                await _client.LogoutAsync();
-                await _client.StopAsync();
+                await _discordClientBroker.LogoutAsync();
+                await _discordClientBroker.StopAsync();
                 _isRunning = false;
                 Log.Information("Bot logged out of Discord!");
             }
