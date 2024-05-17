@@ -123,9 +123,9 @@ namespace DiscordBot.Services
             await ReplyAsync(message, messageResponse);
         }
 
-        private string CheckCommands(SocketMessage message, LinkedList<DiscordMessage> channelConversation)
+        private static string CheckCommands(SocketMessage message, LinkedList<DiscordMessage> channelConversation)
         {
-            bool isAdmin = message.Author.Username == "vonnycakes";
+            bool isAdmin = IsAdmin(message);
 
             if (isAdmin)
             {
@@ -138,6 +138,11 @@ namespace DiscordBot.Services
             }
 
             return string.Empty;
+        }
+
+        private static bool IsAdmin(SocketMessage message)
+        {
+            return message.Author.Username == "vonnycakes";
         }
 
         private static void ClearChannelConversation(ulong channelId, LinkedList<DiscordMessage> channelConversation)
