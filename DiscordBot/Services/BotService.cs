@@ -129,7 +129,7 @@ namespace DiscordBot.Services
 
             if (message.Content.ToLower().Trim() == "j!clear")
             {
-                ClearChannelConversation(channelConversation);
+                ClearChannelConversation(message.Channel.Id, channelConversation);
 
                 return "Conversation cleared!";
             }
@@ -137,8 +137,11 @@ namespace DiscordBot.Services
             return string.Empty;
         }
 
-        private void ClearChannelConversation(LinkedList<DiscordMessage> channelConversation) =>
+        private static void ClearChannelConversation(ulong channelId, LinkedList<DiscordMessage> channelConversation)
+        {
+            Log.Information($"Clearing conversation from channel {channelId}...");
             channelConversation.Clear();
+        }
 
         private async Task<OpenAiResponse> GetOpenAiResponse(IEnumerable<DiscordMessage> channelConversation)
         {
