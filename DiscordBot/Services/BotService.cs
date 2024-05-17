@@ -74,6 +74,7 @@ namespace DiscordBot.Services
             var messageContent = message.Content;
             var userName = message.Author.Username;
             var timestamp = message.Timestamp;
+            string messageResponse;
 
             Log.Information($"Received message in {channelId} from {userName}: {messageContent}");
 
@@ -89,41 +90,51 @@ namespace DiscordBot.Services
                 channelConversation.RemoveFirst();
             }
 
-            bool isCommand = CheckCommands(message, channelConversation);
-            if (isCommand) return;
+            string commandResponse = CheckCommands(message, channelConversation);
+            bool isCommand = !string.IsNullOrEmpty(commandResponse);
 
-            // TODO validate message content before adding to history and getting response. It could be some dumb shit.
-            channelConversation.AddLast(new DiscordMessage(message));
-            OpenAiResponse response = await GetOpenAiResponse(channelConversation);
-
-            if (response.Status == OpenAiResponseStatus.Error)
+            if (isCommand)
             {
-                channelConversation.RemoveLast();
+                messageResponse = commandResponse;
+            }
+            else
+            {
+                // TODO validate message content before adding to history and getting response. It could be some dumb shit.
+                channelConversation.AddLast(new DiscordMessage(message));
+                OpenAiResponse response = await GetOpenAiResponse(channelConversation);
+
+                if (response.Status == OpenAiResponseStatus.Error)
+                {
+                    channelConversation.RemoveLast();
+                }
+
+                // include bot response for now also
+                channelConversation.AddLast(new DiscordMessage
+                {
+                    Timestamp = DateTime.UtcNow,
+                    Username = _botName,
+                    Message = response.Content,
+                });
+
+                messageResponse = response.Content;
             }
 
-            Log.Information($"Response from bot in {channelId}: {response.Content}");
-
-            // include bot response for now also
-            channelConversation.AddLast(new DiscordMessage
-            {
-                Timestamp = DateTime.UtcNow,
-                Username = _botName,
-                Message = response.Content,
-            });
-
-            await ReplyAsync(message, response.Content);
+            Log.Information($"Response from bot in {channelId}: {messageResponse}");
+            await ReplyAsync(message, messageResponse);
         }
 
-        private bool CheckCommands(SocketMessage message, LinkedList<DiscordMessage> channelConversation)
+        private string CheckCommands(SocketMessage message, LinkedList<DiscordMessage> channelConversation)
         {
-            if (message.Author.Username != "vonnycakes") return true;
+            if (message.Author.Username != "vonnycakes") return "You aren't Vonn >:C";
 
-            if (message.Content.ToLower() == "j!clear")
+            if (message.Content.ToLower().Trim() == "j!clear")
             {
                 ClearChannelConversation(channelConversation);
+
+                return "Conversation cleared!";
             }
 
-            return true;
+            return string.Empty;
         }
 
         private void ClearChannelConversation(LinkedList<DiscordMessage> channelConversation) =>
