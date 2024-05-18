@@ -10,6 +10,23 @@ Welcome to jubibot, your friendly neighborhood Discord bot powered by OpenAI! De
 ## How to Use
 Add jubibot to your Discord server and start chatting! Ask about arena compositions, gaming strategies, or just have a casual conversation with this quirky cat-bot.
 
+## Project Structure
+### DiscordBot
+
+The DiscordBot folder contains the core of the application in .NET C#. It includes the DiscordSocketClient connection, handles messages by passing them to OpenAI for the response, and tracks conversations.
+
+### DiscordBot.Tests
+
+The DiscordBot.Tests folder contains the accompanying test project for unit tests.
+
+### JubiAPI
+
+The JubiAPI folder contains the .NET Core API responsible for controlling starting, stopping, and configuring the bot from the JubiUI portal app.
+
+### JubiUI
+
+The JubiUI folder contains the React app with a front-end that makes use of the JubiAPI to control the bot.
+
 ## Support
 If you enjoy having jubibot in your server and want to show some love, consider supporting its development by buying a virtual pickle at [Ko-fi](https://ko-fi.com/R6R4NI4T0).
 
